@@ -44,10 +44,32 @@ export const TodoList = types
         },
         removeDones() {
             self.items = self.items.filter(item => item.isDone !== true);
+        },
+        changeOrder(result) {
+            if (!result.destination) return;
+            const items = Array.from(self.items);
+            const [reorderedItem] = items.splice(result.source.index, 1);
+            items.splice(result.destination.index, 0, reorderedItem);
+
+            self.items = items;
         }
     }))
     .views(self => ({
-        get totalPrice() {
-            return self.items.reduce((sum, entry) => sum + entry.price, 0)
+        get tasks() {
+            return { items: self.items };
+        },
+        get activeTasks() {
+            return { items: self.items.filter(item => item.isDone === false) };
+        },
+        get completedTasks() {
+            return { items: self.items.filter(item => item.isDone === true) };
+        },
+        get remainingItemsQtd() {
+            return self.items.reduce((accumulator, task) => {
+                if (task.isDone === false) {
+                    return accumulator + 1;
+                }
+                return accumulator;
+            }, 0);
         }
     }))
