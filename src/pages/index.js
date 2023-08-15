@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { observer } from 'mobx-react';
 import { onSnapshot } from 'mobx-state-tree';
 import { TodoList } from '@/models/Todos';
-import { Card, Row, Input, Typography, Form, Space, Radio, Col, Tooltip, Divider } from 'antd';
+import { Card, Row, Input, Typography, Form, Space, Radio, Col, Tooltip, Divider, Button } from 'antd';
 import { CheckOutlined } from '@ant-design/icons';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import TaskRow from '@/components/TaskRow';
@@ -20,14 +20,18 @@ const categories = [
 function Home() {
   const [form] = Form.useForm();
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const inputRef = useRef(null);
 
-  const handleSendNewTodo = (values) => {
+  const handleSendNewTodo = async (values) => {
     list.add({
       id: uuidv4(),
       task: values.todoTitle.charAt(0).toUpperCase() + values.todoTitle.slice(1),
       isDone: false,
     });
-    form.resetFields();
+    await form.resetFields();
+
+    inputRef.current.focus();
+
   };
 
   const onSelectCategory = ({ target: { value } }) => {
@@ -35,7 +39,6 @@ function Home() {
   };
 
   const handleDragItem = (result) => {
-    console.log(result);
     list.changeOrder(result);
   }
 
@@ -56,10 +59,7 @@ function Home() {
     }
     else {
       return (
-        <>
-          <Typography.Text>No active tasks to show</Typography.Text>
-          <Divider />
-        </>
+        <Typography.Text>No active tasks to show</Typography.Text>
       )
     }
 
@@ -82,10 +82,7 @@ function Home() {
     }
     else {
       return (
-        <>
-          <Typography.Text>No active tasks to show</Typography.Text>
-          <Divider />
-        </>
+        <Typography.Text>No active tasks to show</Typography.Text>
       )
     }
 
@@ -108,14 +105,12 @@ function Home() {
     }
     else {
       return (
-        <>
-          <Typography.Text>No completed tasks to show</Typography.Text>
-          <Divider />
-        </>
+        <Typography.Text>No completed tasks to show</Typography.Text>
       )
     }
 
   }
+
 
   useEffect(() => {
     const itemsLocalStorage = localStorage.getItem('tasks');
@@ -127,6 +122,8 @@ function Home() {
     onSnapshot(list, snapshot => {
       localStorage.setItem("tasks", JSON.stringify(snapshot))
     })
+
+    inputRef.current.focus();
 
   }, []);
 
@@ -157,13 +154,14 @@ function Home() {
                   <Input
                     size="large"
                     placeholder="What needs to be done?"
-                    prefix={list.items.length > 0 && (
+                    prefix={list.items.length > 0 ? (
                       <Tooltip title="Check all tasks">
                         <CheckOutlined onClick={() => {
                           list.checkAll();
                         }} />
                       </Tooltip>
-                    )}
+                    ) : <span />}
+                    ref={inputRef}
                   />
                 </Form.Item>
               </Form>
@@ -196,6 +194,7 @@ function Home() {
                     </Droppable>
                   </DragDropContext>
 
+                  <Divider />
                   <Row
                     justify="space-between"
                     align="middle"
