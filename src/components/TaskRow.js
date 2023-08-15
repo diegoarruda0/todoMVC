@@ -18,8 +18,11 @@ export default function TaskRow({ todo, provided }) {
     };
 
     const handleEdit = (values) => {
-        todo.changeTaskTitle(values.edit.charAt(0).toUpperCase() + values.edit.slice(1));
+        if (values.edit.trim()) {
+            todo.changeTaskTitle(values.edit.charAt(0).toUpperCase() + values.edit.slice(1));
+        }
         setIsEditing(false);
+        form.resetFields();
     };
 
     const handleSetEditing = () => {
@@ -56,7 +59,9 @@ export default function TaskRow({ todo, provided }) {
                                 form={form}
                                 initialValues={{ edit: todo.task }}
                             >
-                                <Form.Item name="edit">
+                                <Form.Item
+                                    name="edit"
+                                >
                                     <Input
                                         ref={inputRef}
                                         onBlur={() => handleEdit({ edit: inputRef.current.input.value })}
