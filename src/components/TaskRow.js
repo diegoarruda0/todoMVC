@@ -68,7 +68,6 @@ export default function TaskRow({ todo, provided }) {
 
                     </Checkbox>
 
-
                     {!isChecked && !isEditing && (
                         <Tooltip title="Edit current task">
                             <EditOutlined style={{ cursor: 'pointer' }} onClick={() => handleSetEditing()} />
