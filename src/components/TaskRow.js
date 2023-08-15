@@ -59,7 +59,7 @@ export default function TaskRow({ todo, provided }) {
                                 <Form.Item name="edit">
                                     <Input
                                         ref={inputRef}
-                                        onBlur={() => setIsEditing(false)}
+                                        onBlur={() => handleEdit({ edit: inputRef.current.input.value })}
                                     />
                                 </Form.Item>
                             </Form>) : (

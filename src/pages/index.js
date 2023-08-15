@@ -30,10 +30,11 @@ function Home() {
       task: values.todoTitle.charAt(0).toUpperCase() + values.todoTitle.slice(1),
       isDone: false,
     });
+    if (selectedCategory === 'Completed') {
+      setSelectedCategory('All');
+    }
     await form.resetFields();
-
     inputRef.current.focus();
-
   };
 
   const onSelectCategory = ({ target: { value } }) => {
