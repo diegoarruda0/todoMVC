@@ -7,6 +7,7 @@ import { Card, Row, Input, Typography, Form, Space, Radio, Col, Tooltip, Divider
 import { CheckOutlined } from '@ant-design/icons';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import TaskRow from '@/components/TaskRow';
+import Head from 'next/head';
 
 
 let list = TodoList.create({ items: [] });
@@ -128,107 +129,113 @@ function Home() {
   }, []);
 
   return (
-    <main>
-      <Row>
-        <Col span={24}>
-          <Row
-            gutter={16}
-            justify="center"
-          >
-            <Typography.Title>To-do List</Typography.Title>
-          </Row>
+    <>
+      <Head>
+        <link rel="shortcut icon" href="/icon.png" />
+        <title>To-do MVC</title>
+      </Head>
+      <main>
+        <Row>
+          <Col span={24}>
+            <Row
+              gutter={16}
+              justify="center"
+            >
+              <Typography.Title>To-do List</Typography.Title>
+            </Row>
 
-          <Row
-            gutter={16}
-            justify="center"
-          >
-            <Col span={10}>
-              <Form
-                form={form}
-                onFinish={handleSendNewTodo}
-              >
-                <Form.Item
-                  name="todoTitle"
-                  rules={[{ required: true, message: 'Type your task!' }]}
-                >
-                  <Input
-                    size="large"
-                    placeholder="What needs to be done?"
-                    prefix={list.items.length > 0 ? (
-                      <Tooltip title="Check all tasks">
-                        <CheckOutlined onClick={() => {
-                          list.checkAll();
-                        }} />
-                      </Tooltip>
-                    ) : <span />}
-                    ref={inputRef}
-                  />
-                </Form.Item>
-              </Form>
-            </Col>
-          </Row>
-
-          {list.items.length > 0 && (
             <Row
               gutter={16}
               justify="center"
             >
               <Col span={10}>
-                <Card bordered={true} >
-                  <DragDropContext onDragEnd={handleDragItem}>
-                    <Droppable droppableId='tasks'>
-                      {(provided) => (
-                        <Space
-                          direction="vertical"
-                          size="middle"
-                          style={{ width: '100%' }}
-                          {...provided.droppableProps}
-                          ref={provided.innerRef}
-                        >
-                          {selectedCategory === "All" && renderAllTasks()}
-                          {selectedCategory === "Active" && renderActiveTasks()}
-                          {selectedCategory === "Completed" && renderCompletedTasks()}
-                          {provided.placeholder}
-                        </Space>
-                      )}
-                    </Droppable>
-                  </DragDropContext>
-
-                  <Divider />
-                  <Row
-                    justify="space-between"
-                    align="middle"
+                <Form
+                  form={form}
+                  onFinish={handleSendNewTodo}
+                >
+                  <Form.Item
+                    name="todoTitle"
+                    rules={[{ required: true, message: 'Type your task!' }]}
                   >
-                    <Col span={6}>
-                      <Typography.Text>{list.remainingItemsQtd} {list.remainingItemsQtd > 1 ? "items" : "item"}  left</Typography.Text>
-                    </Col>
-                    <Divider type='vertical' />
-                    <Col span={8}>
-                      <Radio.Group
-                        options={categories}
-                        onChange={onSelectCategory}
-                        value={selectedCategory}
-                        optionType="button"
-                        size='small'
-                        buttonStyle="solid"
-                      />
-                    </Col>
-                    <Divider type='vertical' />
-                    <Col span={5}>
-                      <Tooltip title="Delete current task">
-                        <Typography.Link onClick={list.removeDones}>
-                          {list.items.some(item => item.isDone === true) ? 'Clear completed' : ''}
-                        </Typography.Link>
-                      </Tooltip >
-                    </Col>
-                  </Row>
-                </Card>
+                    <Input
+                      size="large"
+                      placeholder="What needs to be done?"
+                      prefix={list.items.length > 0 ? (
+                        <Tooltip title="Check all tasks">
+                          <CheckOutlined onClick={() => {
+                            list.checkAll();
+                          }} />
+                        </Tooltip>
+                      ) : <span />}
+                      ref={inputRef}
+                    />
+                  </Form.Item>
+                </Form>
               </Col>
             </Row>
-          )}
-        </Col>
-      </Row >
-    </main >
+
+            {list.items.length > 0 && (
+              <Row
+                gutter={16}
+                justify="center"
+              >
+                <Col span={10}>
+                  <Card bordered={true} >
+                    <DragDropContext onDragEnd={handleDragItem}>
+                      <Droppable droppableId='tasks'>
+                        {(provided) => (
+                          <Space
+                            direction="vertical"
+                            size="middle"
+                            style={{ width: '100%' }}
+                            {...provided.droppableProps}
+                            ref={provided.innerRef}
+                          >
+                            {selectedCategory === "All" && renderAllTasks()}
+                            {selectedCategory === "Active" && renderActiveTasks()}
+                            {selectedCategory === "Completed" && renderCompletedTasks()}
+                            {provided.placeholder}
+                          </Space>
+                        )}
+                      </Droppable>
+                    </DragDropContext>
+
+                    <Divider />
+                    <Row
+                      justify="space-between"
+                      align="middle"
+                    >
+                      <Col span={6}>
+                        <Typography.Text>{list.remainingItemsQtd} {list.remainingItemsQtd > 1 ? "items" : "item"}  left</Typography.Text>
+                      </Col>
+                      <Divider type='vertical' />
+                      <Col span={8}>
+                        <Radio.Group
+                          options={categories}
+                          onChange={onSelectCategory}
+                          value={selectedCategory}
+                          optionType="button"
+                          size='small'
+                          buttonStyle="solid"
+                        />
+                      </Col>
+                      <Divider type='vertical' />
+                      <Col span={5}>
+                        <Tooltip title="Delete current task">
+                          <Typography.Link onClick={list.removeDones}>
+                            {list.items.some(item => item.isDone === true) ? 'Clear completed' : ''}
+                          </Typography.Link>
+                        </Tooltip >
+                      </Col>
+                    </Row>
+                  </Card>
+                </Col>
+              </Row>
+            )}
+          </Col>
+        </Row >
+      </main >
+    </>
   )
 }
 
