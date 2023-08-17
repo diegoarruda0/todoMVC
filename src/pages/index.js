@@ -121,6 +121,8 @@ function Home() {
 
   }
 
+
+
   useEffect(() => {
     const itemsLocalStorage = localStorage.getItem('tasks');
 
@@ -148,19 +150,19 @@ function Home() {
           <Header style={{ height: 100 }}>
             <Row
               justify="center"
-              style={{ margin: 0 }}
+            // style={{ margin: 0 }}
             >
               <Typography.Title style={{ color: 'white' }}>To-do List</Typography.Title>
             </Row>
           </Header>
 
           <Content style={{ padding: 50 }}>
-            <Row justify="center" style={{ margin: 0 }}>
+            <Row justify="center">
               <Col span={24} >
                 <Row
                   gutter={16}
                   justify="center"
-                  style={{ margin: 0 }}
+                // style={{ margin: 0 }}
                 >
                   <Col span={22} style={{ maxWidth: 800 }}>
                     <Form
@@ -198,7 +200,7 @@ function Home() {
                   <Row
                     gutter={16}
                     justify="center"
-                    style={{ margin: 0 }}
+                  // style={{ margin: 0 }}
                   >
                     <Col span={22} style={{ maxWidth: 800 }}>
                       <Card
@@ -211,7 +213,7 @@ function Home() {
                               <Col
                                 style={{
                                   width: '100%',
-                                  maxHeight: '50vh',
+                                  maxHeight: 'calc(100vh - 350px)',
                                   overflow: 'auto',
                                   padding: 20,
                                   backgroundColor: snapshot.isDraggingOver ? "lightcyan" : 'transparent',
@@ -233,7 +235,7 @@ function Home() {
                           justify="space-between"
                           align="middle"
                           style={{
-                            margin: 0,
+                            // margin: 0,
                             paddingTop: 12,
                             paddingRight: 24,
                             paddingBottom: 12,
