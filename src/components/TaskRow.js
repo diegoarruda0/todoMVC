@@ -1,8 +1,8 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { Button, Checkbox, Divider, Form, Input, Row, Tooltip, Typography } from "antd";
 import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 
-export default function TaskRow({ todo, provided }) {
+export default function TaskRow({ todo, provided, isDragging }) {
     const [isEditing, setIsEditing] = useState(false);
     const [form] = Form.useForm();
     const isChecked = todo.isDone;
@@ -32,64 +32,68 @@ export default function TaskRow({ todo, provided }) {
         }, 10)
     }
 
+    const rowStyle = {
+        backgroundColor: isDragging ? 'lightblue' : 'transparent',
+        transition: 'background-color 1s ease',
+        display: 'flex',
+        justifyContent: 'space-between',
+        width: '100%',
+        padding: '10px',
+        alignItems: 'center',
+        ...provided.draggableProps.style,
+    };
+
     return (
         <Row
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             ref={provided.innerRef}
+            style={rowStyle}
         >
-            <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    width: '100%',
-                    alignItems: 'center'
-                }}
-            >
-                <div>
-                    <Checkbox
-                        onChange={(e) => handleSetTodoDone(todo, e.target.checked)}
-                        checked={isChecked}
-                    >
-                        {isEditing ? (
-                            <Form
-                                layout="inline"
-                                size="small"
-                                onFinish={handleEdit}
-                                form={form}
-                                initialValues={{ edit: todo.task }}
+            <div>
+                <Checkbox
+                    onChange={(e) => handleSetTodoDone(todo, e.target.checked)}
+                    checked={isChecked}
+                >
+                    {isEditing ? (
+                        <Form
+                            layout="inline"
+                            size="small"
+                            onFinish={handleEdit}
+                            form={form}
+                            initialValues={{ edit: todo.task }}
+                        >
+                            <Form.Item
+                                name="edit"
                             >
-                                <Form.Item
-                                    name="edit"
-                                >
-                                    <Input
-                                        ref={inputRef}
-                                        onBlur={() => handleEdit({ edit: inputRef.current.input.value })}
-                                    />
-                                </Form.Item>
-                            </Form>) : (
-                            <Typography.Text delete={isChecked} disabled={isChecked}>{todo.task}</Typography.Text>
-                        )}
-
-                    </Checkbox>
-
-                    {!isChecked && !isEditing && (
-                        <Tooltip title="Edit current task">
-                            <EditOutlined style={{ cursor: 'pointer' }} onClick={() => handleSetEditing()} />
-                        </Tooltip>
+                                <Input
+                                    ref={inputRef}
+                                    onBlur={() => handleEdit({ edit: inputRef.current.input.value })}
+                                />
+                            </Form.Item>
+                        </Form>
+                    ) : (
+                        <Typography.Text delete={isChecked} disabled={isChecked}>{todo.task}</Typography.Text>
                     )}
-                </div>
 
-                <Tooltip title="Delete current task">
-                    <Button
-                        type="primary"
-                        danger
-                        onClick={() => handleDeleteTodo(todo)}
-                    >
-                        <CloseOutlined />
-                    </Button>
-                </Tooltip>
+                </Checkbox>
+
+                {!isChecked && !isEditing && (
+                    <Tooltip title="Edit current task">
+                        <EditOutlined style={{ cursor: 'pointer' }} onClick={() => handleSetEditing()} />
+                    </Tooltip>
+                )}
             </div>
+
+            <Tooltip title="Delete current task">
+                <Button
+                    type="primary"
+                    danger
+                    onClick={() => handleDeleteTodo(todo)}
+                >
+                    <CloseOutlined />
+                </Button>
+            </Tooltip>
         </Row>
     )
 }

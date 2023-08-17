@@ -46,6 +46,7 @@ function Home() {
   }
 
   const renderAllTasks = () => {
+    0
 
     const items = list.items;
 
@@ -53,8 +54,8 @@ function Home() {
       return (
         items.map((todo, index) => (
           <Draggable key={todo.id} draggableId={todo.id} index={index}>
-            {(provided) => (
-              <TaskRow todo={todo} provided={provided} />
+            {(provided, snapshot) => (
+              <TaskRow todo={todo} provided={provided} isDragging={snapshot.isDragging} />
             )}
           </Draggable>
         ))
@@ -76,8 +77,8 @@ function Home() {
       return (
         items.map((todo, index) => (
           <Draggable key={todo.id} draggableId={todo.id} index={index}>
-            {(provided) => (
-              <TaskRow todo={todo} provided={provided} />
+            {(provided, snapshot) => (
+              <TaskRow todo={todo} provided={provided} isDragging={snapshot.isDragging} />
             )}
           </Draggable>
         ))
@@ -99,8 +100,8 @@ function Home() {
       return (
         items.map((todo, index) => (
           <Draggable key={todo.id} draggableId={todo.id} index={index}>
-            {(provided) => (
-              <TaskRow todo={todo} provided={provided} />
+            {(provided, snapshot) => (
+              <TaskRow todo={todo} provided={provided} isDragging={snapshot.isDragging} />
             )}
           </Draggable>
         ))
@@ -191,14 +192,20 @@ function Home() {
                     style={{ margin: 0 }}
                   >
                     <Col span={22} style={{ maxWidth: 800 }}>
-                      <Card bordered={true} >
+                      <Card
+                        bordered={false}
+                        bodyStyle={{ padding: 0 }}
+                      >
                         <DragDropContext onDragEnd={handleDragItem}>
                           <Droppable droppableId='tasks'>
-                            {(provided) => (
-                              <Space
-                                direction="vertical"
-                                size="middle"
-                                style={{ width: '100%' }}
+                            {(provided, snapshot) => (
+                              <Col
+                                style={{
+                                  width: '100%',
+                                  padding: 20,
+                                  backgroundColor: snapshot.isDraggingOver ? "lightcyan" : 'transparent',
+                                  transition: 'background-color 1s ease'
+                                }}
                                 {...provided.droppableProps}
                                 ref={provided.innerRef}
                               >
@@ -206,17 +213,22 @@ function Home() {
                                 {selectedCategory === "Active" && renderActiveTasks()}
                                 {selectedCategory === "Completed" && renderCompletedTasks()}
                                 {provided.placeholder}
-                              </Space>
+                              </Col>
                             )}
                           </Droppable>
                         </DragDropContext>
 
-                        <Divider />
                         <Row
                           justify="space-between"
                           align="middle"
-                          style={{ margin: 0 }}
-
+                          style={{
+                            margin: 0,
+                            paddingTop: 12,
+                            paddingRight: 24,
+                            paddingBottom: 12,
+                            paddingLeft: 24,
+                            borderTop: '1px solid lightGray'
+                          }}
                         >
                           <Col span={6}>
                             <Typography.Text>{list.remainingItemsQtd} {list.remainingItemsQtd > 1 ? "items" : "item"}  left</Typography.Text>
