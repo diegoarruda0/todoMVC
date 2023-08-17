@@ -150,7 +150,6 @@ function Home() {
           <Header style={{ height: 100 }}>
             <Row
               justify="center"
-            // style={{ margin: 0 }}
             >
               <Typography.Title style={{ color: 'white' }}>To-do List</Typography.Title>
             </Row>
@@ -162,9 +161,8 @@ function Home() {
                 <Row
                   gutter={16}
                   justify="center"
-                // style={{ margin: 0 }}
                 >
-                  <Col span={22} style={{ maxWidth: 800 }}>
+                  <Col lg={11} md={11} sm={11} xs={20}>
                     <Form
                       form={form}
                       onFinish={handleSendNewTodo}
@@ -200,9 +198,8 @@ function Home() {
                   <Row
                     gutter={16}
                     justify="center"
-                  // style={{ margin: 0 }}
                   >
-                    <Col span={22} style={{ maxWidth: 800 }}>
+                    <Col lg={11} md={11} sm={11} xs={20}>
                       <Card
                         bordered={false}
                         bodyStyle={{ padding: 0 }}
@@ -235,7 +232,6 @@ function Home() {
                           justify="space-between"
                           align="middle"
                           style={{
-                            // margin: 0,
                             paddingTop: 12,
                             paddingRight: 24,
                             paddingBottom: 12,
