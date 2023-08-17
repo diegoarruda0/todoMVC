@@ -32,7 +32,7 @@ function Home() {
     return formattedString;
   }
 
-  const handleSendNewTodo = (values) => {
+  const handleSendNewTodo = async (values) => {
     list.add({
       id: uuidv4(),
       task: formatString(values.todoTitle),
@@ -41,7 +41,7 @@ function Home() {
     if (selectedCategory === 'Completed') {
       setSelectedCategory('All');
     }
-    form.resetFields();
+    await form.resetFields();
     inputRef.current.focus();
   };
 
@@ -211,9 +211,11 @@ function Home() {
                               <Col
                                 style={{
                                   width: '100%',
+                                  maxHeight: '50vh',
+                                  overflow: 'auto',
                                   padding: 20,
                                   backgroundColor: snapshot.isDraggingOver ? "lightcyan" : 'transparent',
-                                  transition: 'background-color 1s ease'
+                                  transition: 'background-color 0.5s ease'
                                 }}
                                 {...provided.droppableProps}
                                 ref={provided.innerRef}
@@ -270,8 +272,6 @@ function Home() {
             </Row >
           </Content>
         </Layout>
-
-
       </main >
     </>
   )
