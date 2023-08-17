@@ -24,16 +24,24 @@ function Home() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const inputRef = useRef(null);
 
-  const handleSendNewTodo = async (values) => {
+  const formatString = (inputString) => {
+    let trimmedString = inputString.trim();
+
+    let formattedString = trimmedString.charAt(0).toUpperCase() + trimmedString.slice(1);
+
+    return formattedString;
+  }
+
+  const handleSendNewTodo = (values) => {
     list.add({
       id: uuidv4(),
-      task: values.todoTitle.charAt(0).toUpperCase() + values.todoTitle.slice(1),
+      task: formatString(values.todoTitle),
       isDone: false,
     });
     if (selectedCategory === 'Completed') {
       setSelectedCategory('All');
     }
-    await form.resetFields();
+    form.resetFields();
     inputRef.current.focus();
   };
 
@@ -46,8 +54,6 @@ function Home() {
   }
 
   const renderAllTasks = () => {
-    0
-
     const items = list.items;
 
     if (items.length > 0) {
@@ -163,7 +169,10 @@ function Home() {
                     >
                       <Form.Item
                         name="todoTitle"
-                        rules={[{ required: true, message: 'Type your task!' }]}
+                        rules={[
+                          { required: true, message: 'Type your task!' },
+                          { whitespace: true, message: 'Task title cannot be empty!' }
+                        ]}
                       >
                         <Input
                           size="large"
